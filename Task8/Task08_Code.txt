@@ -1,0 +1,9 @@
+TASK 8 - Trace the Compilation Process
+======================================
+
+/* Example commands */
+gcc -E billing.c -o billing.i
+gcc -S billing.c -o billing.s
+gcc -Wall -Wextra -c billing.c -o billing.o
+gcc billing.o -o billing
+./billing
