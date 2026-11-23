@@ -1,0 +1,29 @@
+TASK 5 - Header Files and Conditional Compilation
+=================================================
+
+/* tariff.h */
+#ifndef TARIFF_H
+#define TARIFF_H
+#define FIXED_CHARGE_PAISE 5000L
+long compute_bill(int units);
+#endif
+
+/* tariff.c */
+#include "tariff.h"
+long compute_bill(int units) {
+    long p = FIXED_CHARGE_PAISE;
+    if (units > 100) {
+        int n = units - 100;
+        if (n > 100) {
+            p += 100L * 225 + (long)(n-100) * 450;
+        } else p += (long)n * 225;
+    }
+#ifdef DEBUG
+    /* Debug build can print intermediate values here. */
+#endif
+    return p;
+}
+
+/* Build:
+   gcc -Wall -Wextra -DDEBUG main.c tariff.c -o billing
+*/
