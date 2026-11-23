@@ -1,0 +1,27 @@
+TASK 11 - Recommend and Defend the Final Design
+===============================================
+
+/* Final core calculation */
+#include <stdint.h>
+#include <limits.h>
+typedef uint16_t meter_t;
+typedef int64_t money_t;
+
+#define FREE_UNITS 100U
+#define MID_LIMIT 200U
+#define MID_RATE 225LL
+#define HIGH_RATE 450LL
+#define FIXED_PAISE 5000LL
+
+static uint32_t consumption(meter_t prev, meter_t cur) {
+    return (uint16_t)(cur - prev);
+}
+static money_t bill(uint32_t u) {
+    money_t p = FIXED_PAISE;
+    if (u > FREE_UNITS) {
+        uint32_t mid = (u < MID_LIMIT ? u : MID_LIMIT) - FREE_UNITS;
+        p += (money_t)mid * MID_RATE;
+    }
+    if (u > MID_LIMIT) p += (money_t)(u-MID_LIMIT)*HIGH_RATE;
+    return p;
+}
