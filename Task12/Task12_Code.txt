@@ -1,0 +1,27 @@
+TASK 12 - Re-evaluate and Adapt the Smart-Meter Design
+======================================================
+
+#include <stdio.h>
+#include <stdint.h>
+
+int main(void) {
+    unsigned long long input_wh;
+    uint64_t watt_hours;
+    int peak;
+    int64_t base_paise_per_kwh = 225; /* loaded from config in production */
+    printf("Enter interval Wh and peak flag (0/1): ");
+    if (scanf("%llu %d", &input_wh, &peak) != 2 ||
+        (peak != 0 && peak != 1)) {
+        puts("Invalid input"); return 1;
+    }
+    watt_hours = (uint64_t)input_wh;
+    /* paise = Wh * paise/kWh / 1000; peak adds 20%.
+       Round to nearest paise using +500 before division. */
+    int64_t numerator = (int64_t)watt_hours * base_paise_per_kwh;
+    if (peak) numerator = numerator * 120 / 100;
+    int64_t charge = (numerator + 500) / 1000;
+    printf("Energy charge: %lld paise (Rs %lld.%02lld)\n",
+           (long long)charge, (long long)(charge/100),
+           (long long)(charge%100));
+    return 0;
+}
